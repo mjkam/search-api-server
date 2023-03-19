@@ -4,6 +4,7 @@ import com.mjkam.search.external.BlogSearchApiException;
 import com.mjkam.search.external.BlogSearchApiRequester;
 import com.mjkam.search.external.BlogSearchApiResponse;
 import com.mjkam.search.external.BlogSearchRequest;
+import com.mjkam.search.external.provider.ProviderType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,5 +43,10 @@ public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
 
         return BlogSearchApiResponse.fromKakao(
                 request.getPage(), request.getSize(), responseBody);
+    }
+
+    @Override
+    public boolean isMatch(ProviderType providerType) {
+        return providerType.equals(ProviderType.KAKAO);
     }
 }
