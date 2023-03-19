@@ -12,7 +12,7 @@ public class BlogSearchApiResponse {
     private final int pageableCount;
     private final List<BlogInfo> documents;
 
-    public BlogSearchApiResponse(int totalCount, int pageableCount, List<BlogInfo> blogInfos) {
+    private BlogSearchApiResponse(int totalCount, int pageableCount, List<BlogInfo> blogInfos) {
         this.totalCount = totalCount;
         this.pageableCount = pageableCount;
         this.documents = blogInfos;
