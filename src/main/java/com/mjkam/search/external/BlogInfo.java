@@ -1,9 +1,11 @@
 package com.mjkam.search.external;
 
 import com.mjkam.search.external.provider.kakao.KakaoDocument;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class BlogInfo {
     private final String title;
     private final String blogName;
