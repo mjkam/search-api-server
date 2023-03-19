@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mjkam.search.external.BlogSearchApiResponse;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.SortingType;
-import com.mjkam.search.external.provider.kakao.support.DummyKakaoDocumentCreator;
+import com.mjkam.search.external.provider.kakao.support.KakaoApiResponseCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,18 +54,8 @@ public class KakaoBlogSearchApiRequesterTest {
 
         int totalCount = 100000000;
         int pageableCount = 800;
-        KakaoMeta meta =
-                kakaoMeta()
-                        .totalCount(totalCount)
-                        .pageableCount(pageableCount)
-                        .build();
-        List<KakaoDocument> kakaoDocuments = DummyKakaoDocumentCreator.create(pageableCount, page, size);
 
-        KakaoApiResponse kakaoApiResponse =
-                kakaoApiResponse()
-                        .kakaoMeta(meta)
-                        .documents(kakaoDocuments)
-                        .build();
+        KakaoApiResponse kakaoApiResponse = KakaoApiResponseCreator.create(totalCount, pageableCount, page, size);
 
         mockRestServiceServer
                 .expect(requestTo(url(query, page, size, sortingType)))
