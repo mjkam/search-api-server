@@ -1,4 +1,4 @@
-package com.mjkam.search.external.provider.kakao.builder;
+package com.mjkam.search.external.provider.kakao.support;
 
 import com.mjkam.search.external.provider.kakao.KakaoDocument;
 import org.springframework.test.util.ReflectionTestUtils;
