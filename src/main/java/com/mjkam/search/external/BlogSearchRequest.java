@@ -1,5 +1,8 @@
 package com.mjkam.search.external;
 
+import lombok.Getter;
+
+@Getter
 public class BlogSearchRequest {
     private final String query;
     private final Integer page;
