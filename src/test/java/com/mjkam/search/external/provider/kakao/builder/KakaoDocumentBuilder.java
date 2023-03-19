@@ -1,0 +1,64 @@
+package com.mjkam.search.external.provider.kakao.builder;
+
+import com.mjkam.search.external.provider.kakao.KakaoDocument;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDateTime;
+
+public final class KakaoDocumentBuilder {
+    private String title = "";
+    private String contents = "";
+    private String url = "";
+    private String blogName = "";
+    private String thumbnail = "";
+    private LocalDateTime datetime = LocalDateTime.now();
+
+    private KakaoDocumentBuilder() {
+    }
+
+    public static KakaoDocumentBuilder kakaoDocument() {
+        return new KakaoDocumentBuilder();
+    }
+
+    public KakaoDocumentBuilder title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public KakaoDocumentBuilder contents(String contents) {
+        this.contents = contents;
+        return this;
+    }
+
+    public KakaoDocumentBuilder url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public KakaoDocumentBuilder blogName(String blogName) {
+        this.blogName = blogName;
+        return this;
+    }
+
+    public KakaoDocumentBuilder thumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+        return this;
+    }
+
+    public KakaoDocumentBuilder datetime(LocalDateTime datetime) {
+        this.datetime = datetime;
+        return this;
+    }
+
+    public KakaoDocument build() {
+        KakaoDocument kakaoDocument = new KakaoDocument();
+        ReflectionTestUtils.setField(kakaoDocument, "title", title);
+        ReflectionTestUtils.setField(kakaoDocument, "contents", contents);
+        ReflectionTestUtils.setField(kakaoDocument, "url", url);
+        ReflectionTestUtils.setField(kakaoDocument, "blogName", blogName);
+        ReflectionTestUtils.setField(kakaoDocument, "thumbnail", thumbnail);
+        ReflectionTestUtils.setField(kakaoDocument, "datetime", datetime);
+
+        return kakaoDocument;
+    }
+}
