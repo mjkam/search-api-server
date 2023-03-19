@@ -1,5 +1,7 @@
 package com.mjkam.search.external;
 
+import com.mjkam.search.external.provider.kakao.KakaoDocument;
+
 import java.time.LocalDateTime;
 
 public class BlogInfo {
@@ -17,5 +19,15 @@ public class BlogInfo {
         this.url = url;
         this.thumbnail = thumbnail;
         this.postDate = postDate;
+    }
+
+    public static BlogInfo of(KakaoDocument kakaoDocument) {
+        return new BlogInfo(
+                kakaoDocument.getTitle(),
+                kakaoDocument.getBlogName(),
+                kakaoDocument.getContents(),
+                kakaoDocument.getUrl(),
+                kakaoDocument.getThumbnail(),
+                kakaoDocument.getDatetime());
     }
 }
