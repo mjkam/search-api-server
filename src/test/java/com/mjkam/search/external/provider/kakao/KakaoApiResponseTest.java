@@ -1,21 +1,15 @@
 package com.mjkam.search.external.provider.kakao;
 
-import com.mjkam.search.external.provider.kakao.builder.KakaoApiResponseBuilder;
-import com.mjkam.search.external.provider.kakao.builder.KakaoDocumentBuilder;
-import com.mjkam.search.external.provider.kakao.builder.KakaoMetaBuilder;
-import org.assertj.core.api.Assertions;
+import com.mjkam.search.external.provider.kakao.support.DummyKakaoDocumentCreator;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import static com.mjkam.search.external.provider.kakao.builder.KakaoApiResponseBuilder.*;
-import static com.mjkam.search.external.provider.kakao.builder.KakaoMetaBuilder.*;
-import static org.assertj.core.api.Assertions.*;
+import static com.mjkam.search.external.provider.kakao.support.KakaoApiResponseBuilder.kakaoApiResponse;
+import static com.mjkam.search.external.provider.kakao.support.KakaoMetaBuilder.kakaoMeta;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class KakaoApiResponseTest {
     @ParameterizedTest
@@ -32,7 +26,7 @@ public class KakaoApiResponseTest {
                 kakaoMeta()
                         .pageableCount(pageableCount)
                         .build();
-        List<KakaoDocument> kakaoDocuments = createKakaoDocuments(pageableCount, page, size);
+        List<KakaoDocument> kakaoDocuments = DummyKakaoDocumentCreator.create(pageableCount, page, size);
 
         KakaoApiResponse kakaoApiResponse =
                 kakaoApiResponse()
@@ -45,27 +39,5 @@ public class KakaoApiResponseTest {
 
         //then
         assertThat(result.size()).isEqualTo(expect);
-    }
-
-    // kakao api 가 리턴하는 방식
-    private List<KakaoDocument> createKakaoDocuments(int pageableCount, int page, int size) {
-        if (pageableCount == 0) {
-            return List.of();
-        }
-        if (pageableCount % size == 0) {
-            return documents(size);
-        } else {
-            if (page * size > pageableCount) {
-                return documents(pageableCount % size);
-            } else {
-                return documents(size);
-            }
-        }
-    }
-
-    private List<KakaoDocument> documents(int count) {
-        return IntStream.range(0, count)
-                .mapToObj(i -> new KakaoDocument())
-                .collect(Collectors.toList());
     }
 }
