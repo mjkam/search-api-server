@@ -1,8 +1,10 @@
 package com.mjkam.search.external;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class BlogSearchRequest {
     private final String query;
     private final Integer page;
