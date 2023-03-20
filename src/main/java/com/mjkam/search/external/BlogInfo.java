@@ -1,5 +1,6 @@
 package com.mjkam.search.external;
 
+import com.mjkam.search.external.provider.ProviderBlogInfo;
 import com.mjkam.search.external.provider.kakao.KakaoDocument;
 import com.mjkam.search.external.provider.naver.NaverItem;
 import lombok.Getter;
@@ -26,23 +27,13 @@ public class BlogInfo {
         this.postDate = postDate;
     }
 
-    public static BlogInfo of(KakaoDocument kakaoDocument) {
+    public static BlogInfo of(ProviderBlogInfo providerBlogInfo) {
         return new BlogInfo(
-                kakaoDocument.getTitle(),
-                kakaoDocument.getBlogName(),
-                kakaoDocument.getContents(),
-                kakaoDocument.getUrl(),
-                kakaoDocument.getThumbnail(),
-                kakaoDocument.getDatetime());
-    }
-
-    public static BlogInfo of(NaverItem naverItem) {
-        return new BlogInfo(
-                naverItem.getTitle(),
-                naverItem.getBloggerName(),
-                naverItem.getDescription(),
-                naverItem.getLink(),
-                "",
-                naverItem.getPostDate().atStartOfDay());
+                providerBlogInfo.getTitle(),
+                providerBlogInfo.getBlogName(),
+                providerBlogInfo.getContents(),
+                providerBlogInfo.getUrl(),
+                providerBlogInfo.getThumbnail(),
+                providerBlogInfo.getPostingDateTime());
     }
 }
