@@ -14,17 +14,21 @@ public class KakaoApiResponseTest {
     @DisplayName("KakaoApiResponse 는 요청 page 와 size 에 맞는 개수로 잘라서 Document 를 리턴해야함")
     @CsvSource(delimiter = ':',
             value = {
-                    "100:10:10:10",
-                    "100:9:7:7",
-                    "100:15:9:0",
-                    "13:2:7:6"})
-    void splitResponseDocumentsByPageAndSize(int pageableCount, int page, int size, int expect) {
-        KakaoApiResponse kakaoApiResponse = KakaoApiResponseCreator.create(pageableCount, pageableCount, page, size);
+                    "10:10:100:100:10",
+                    "9:7:1000:100:7",
+                    "15:9:100:100:0",
+                    "2:7:13:13:6"
+            })
+    void splitResponseDocumentsByPageAndSize(
+            int page, int size, int totalCountFromServer, int pageableCountFromServer, int expectItemCount) {
+
+        KakaoApiResponse kakaoApiResponse =
+                KakaoApiResponseCreator.createKakaoResponse(totalCountFromServer, pageableCountFromServer, page, size);
 
         //when
         List<KakaoDocument> result = kakaoApiResponse.getDocumentsForResponse(page, size);
 
         //then
-        assertThat(result.size()).isEqualTo(expect);
+        assertThat(result.size()).isEqualTo(expectItemCount);
     }
 }
