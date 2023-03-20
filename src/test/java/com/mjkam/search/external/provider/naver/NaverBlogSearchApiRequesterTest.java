@@ -6,14 +6,20 @@ import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
 import com.mjkam.search.external.SortingType;
 import com.mjkam.search.external.provider.naver.support.NaverApiResponseCreator;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.UnknownHostException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
@@ -65,15 +71,15 @@ public class NaverBlogSearchApiRequesterTest extends ExternalBaseTest {
     private void mockNaverApiServer(int totalCountFromServer, int page, int size) throws JsonProcessingException {
         NaverApiResponse expectResponse = NaverApiResponseCreator.create(totalCountFromServer, page, size);
         mockRestServiceServer
-                .expect(requestTo(url(DUMMY_API_ENDPOINT, DUMMY_QUERY, page, size, DUMMY_SORTING_TYPE)))
+                .expect(requestTo(url(DUMMY_QUERY, page, size, DUMMY_SORTING_TYPE)))
                 .andExpect(header("X-Naver-Client-Id", DUMMY_NAVER_CLIENT_ID))
                 .andExpect(header("X-Naver-Client-Secret", DUMMY_NAVER_CLIENT_SECRET))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(expectResponse), MediaType.APPLICATION_JSON));
     }
 
-    private String url(String endpoint, String query, int page, int size, SortingType sortingType) {
+    private String url(String query, int page, int size, SortingType sortingType) {
         int start = (page - 1) * size + 1;
         return String.format("%s?query=%s&start=%d&display=%d&sort=%s",
-                endpoint, query, start, size, sortingType.getNaverName());
+                DUMMY_API_ENDPOINT, query, start, size, sortingType.getNaverName());
     }
 }
