@@ -1,7 +1,6 @@
 package com.mjkam.search.external.provider.kakao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mjkam.search.external.BlogSearchApiResponse;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
@@ -12,18 +11,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.ResponseCreator;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.UnknownHostException;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
@@ -42,6 +39,21 @@ public class KakaoBlogSearchApiRequesterTest extends ExternalBaseTest {
 
         mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
         sut = new KakaoBlogSearchApiRequester(restTemplate, kakaoConfiguration);
+    }
+
+    @Test
+    @DisplayName("Kakao api 호출 시 response body 가 null 이면 예외 발생")
+    void throwException_whenResponseBodyIsNull() {
+        //given
+        BlogSearchRequest request = new BlogSearchRequest(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE);
+
+        mockRestServiceServer
+                .expect(requestTo(url(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE)))
+                .andRespond(MockRestResponseCreators.withNoContent());
+
+        //when then
+        Assertions.assertThatThrownBy(() -> sut.execute(request))
+                .isInstanceOf(Exception.class);
     }
 
 
