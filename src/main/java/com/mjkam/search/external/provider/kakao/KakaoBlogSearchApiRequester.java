@@ -1,6 +1,5 @@
 package com.mjkam.search.external.provider.kakao;
 
-import com.mjkam.search.external.BlogSearchApiException;
 import com.mjkam.search.external.BlogSearchApiRequester;
 import com.mjkam.search.external.BlogSearchApiResponse;
 import com.mjkam.search.external.BlogSearchRequest;
@@ -41,7 +40,7 @@ public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
 
             KakaoApiResponse responseBody = response.getBody();
             if (responseBody == null) {
-                throw new BlogSearchApiException("Body should be not null");
+                throw new IllegalStateException("Body should be not null");
             }
 
             return BlogSearchApiResponse.fromKakao(
