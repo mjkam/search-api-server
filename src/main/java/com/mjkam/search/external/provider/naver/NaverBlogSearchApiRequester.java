@@ -1,13 +1,11 @@
 package com.mjkam.search.external.provider.naver;
 
-import com.mjkam.search.external.BlogSearchApiException;
 import com.mjkam.search.external.BlogSearchApiRequester;
 import com.mjkam.search.external.BlogSearchApiResponse;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
-import com.mjkam.search.external.provider.kakao.KakaoApiResponse;
-import com.mjkam.search.external.provider.kakao.KakaoConfiguration;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
     private final RestTemplate restTemplate;
     private final NaverConfiguration naverConfiguration;
@@ -36,15 +35,23 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
                 .queryParam("sort", request.getSortingType().getNaverName())
                 .toUriString();
 
-        ResponseEntity<NaverApiResponse> response =
-                restTemplate.exchange(uri, HttpMethod.GET, header, NaverApiResponse.class);
+        try {
+            ResponseEntity<NaverApiResponse> response =
+                    restTemplate.exchange(uri, HttpMethod.GET, header, NaverApiResponse.class);
 
-        NaverApiResponse responseBody = response.getBody();
-        if (responseBody == null) {
-            throw new BlogSearchApiException("Body should be not null");
+            NaverApiResponse responseBody = response.getBody();
+            if (responseBody == null) {
+                throw new IllegalStateException("Body should be not null");
+            }
+
+            return BlogSearchApiResponse.fromNaver(responseBody);
+        } catch (Exception e) {
+            log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | clientId: {} | clientSecret: {}",
+                    ProviderType.NAVER, e.getMessage(), request, naverConfiguration.getUrl(), naverConfiguration.getClientId(), naverConfiguration.getClientSecret());
+            throw e;
         }
 
-        return BlogSearchApiResponse.fromNaver(responseBody);
+
     }
 
     @Override

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
@@ -26,11 +25,9 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-@SpringBootTest
 public class NaverBlogSearchApiRequesterTest extends ExternalBaseTest {
     private NaverBlogSearchApiRequester sut;
     private MockRestServiceServer mockRestServiceServer;
-
 
     @BeforeEach
     void setup() {
@@ -43,6 +40,53 @@ public class NaverBlogSearchApiRequesterTest extends ExternalBaseTest {
         mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
         sut = new NaverBlogSearchApiRequester(restTemplate, naverConfiguration);
     }
+
+    @Test
+    @DisplayName("Naver api 호출 시 response body 가 null 이면 예외 발생")
+    void throwException_whenResponseBodyIsNull() {
+        //given
+        BlogSearchRequest request = new BlogSearchRequest(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE);
+
+        mockRestServiceServer
+                .expect(requestTo(url(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE)))
+                .andRespond(MockRestResponseCreators.withNoContent());
+
+        //when then
+        Assertions.assertThatThrownBy(() -> sut.execute(request))
+                .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    @DisplayName("Naver api 호출 시 잘못된 host 로 요청하면 예외 발생")
+    void throwException_whenUseInvalidHostName() {
+        //given
+        BlogSearchRequest request = new BlogSearchRequest(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE);
+
+        mockRestServiceServer
+                .expect(requestTo(url(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE)))
+                .andRespond((response) -> { throw new UnknownHostException();});
+
+        //when then
+        Assertions.assertThatThrownBy(() -> sut.execute(request))
+                .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    @DisplayName("Naver Api 호출에서 http status 200 이 아닌 응답이 오면 예외 발생")
+    void throwException_whenResponseStatusCodeIsNot200() {
+        //given
+        BlogSearchRequest request = new BlogSearchRequest(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE);
+
+        mockRestServiceServer
+                .expect(requestTo(url(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE)))
+                .andRespond((response) -> { throw new RestClientException("");});
+
+        //when then
+        Assertions.assertThatThrownBy(() -> sut.execute(request))
+                .isInstanceOf(Exception.class);
+    }
+
+
 
     @ParameterizedTest
     @DisplayName("naver api 호출 성공 테스트")
