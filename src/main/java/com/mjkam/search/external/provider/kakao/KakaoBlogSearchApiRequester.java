@@ -6,6 +6,7 @@ import com.mjkam.search.external.BlogSearchApiResponse;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
     private final RestTemplate restTemplate;
     private final KakaoConfiguration kakaoConfiguration;
@@ -33,16 +35,22 @@ public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
                 .queryParam("sort", request.getSortingType().getKakaoName())
                 .toUriString();
 
-        ResponseEntity<KakaoApiResponse> response =
-                restTemplate.exchange(uri, HttpMethod.GET, header, KakaoApiResponse.class);
+        try {
+            ResponseEntity<KakaoApiResponse> response =
+                    restTemplate.exchange(uri, HttpMethod.GET, header, KakaoApiResponse.class);
 
-        KakaoApiResponse responseBody = response.getBody();
-        if (responseBody == null) {
-            throw new BlogSearchApiException("Body should be not null");
+            KakaoApiResponse responseBody = response.getBody();
+            if (responseBody == null) {
+                throw new BlogSearchApiException("Body should be not null");
+            }
+
+            return BlogSearchApiResponse.fromKakao(
+                    request.getPage(), request.getSize(), responseBody);
+        } catch (Exception e) {
+            log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | key: {}",
+                    ProviderType.KAKAO, e.getMessage(), request, kakaoConfiguration.getUrl(), kakaoConfiguration.getKey());
+            throw e;
         }
-
-        return BlogSearchApiResponse.fromKakao(
-                request.getPage(), request.getSize(), responseBody);
     }
 
     @Override

@@ -7,15 +7,23 @@ import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
 import com.mjkam.search.external.SortingType;
 import com.mjkam.search.external.provider.kakao.support.KakaoApiResponseCreator;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.UnknownHostException;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
@@ -34,6 +42,37 @@ public class KakaoBlogSearchApiRequesterTest extends ExternalBaseTest {
 
         mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
         sut = new KakaoBlogSearchApiRequester(restTemplate, kakaoConfiguration);
+    }
+
+
+    @Test
+    @DisplayName("Kakao api 호출 시 잘못된 host 로 요청하면 예외 발생")
+    void throwException_whenUseInvalidHostName() {
+        //given
+        BlogSearchRequest request = new BlogSearchRequest(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE);
+
+        mockRestServiceServer
+                .expect(requestTo(url(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE)))
+                .andRespond((response) -> { throw new UnknownHostException();});
+
+        //when then
+        Assertions.assertThatThrownBy(() -> sut.execute(request))
+                .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    @DisplayName("Kakao Api 호출에서 http status 200 이 아닌 응답이 오면 예외 발생")
+    void throwException_whenResponseStatusCodeIsNot200() {
+        //given
+        BlogSearchRequest request = new BlogSearchRequest(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE);
+
+        mockRestServiceServer
+                .expect(requestTo(url(DUMMY_QUERY, 1, 1, DUMMY_SORTING_TYPE)))
+                .andRespond((response) -> { throw new RestClientException("");});
+
+        //when then
+        Assertions.assertThatThrownBy(() -> sut.execute(request))
+                .isInstanceOf(Exception.class);
     }
 
     @ParameterizedTest
