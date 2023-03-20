@@ -1,6 +1,7 @@
 package com.mjkam.search.external;
 
 import com.mjkam.search.external.provider.kakao.KakaoApiResponse;
+import com.mjkam.search.external.provider.naver.NaverApiResponse;
 import lombok.Getter;
 
 import java.util.List;
@@ -25,5 +26,13 @@ public class BlogSearchApiResponse {
 
         return new BlogSearchApiResponse(
                 response.getTotalCount(), response.getPageableCount(), blogDocuments);
+    }
+
+    public static BlogSearchApiResponse fromNaver(NaverApiResponse response) {
+        List<BlogInfo> blogInfos = response.getItems().stream()
+                .map(BlogInfo::of)
+                .collect(Collectors.toList());
+
+        return new BlogSearchApiResponse(response.getTotal(), Math.min(response.getTotal(), 200), blogInfos);
     }
 }

@@ -15,4 +15,8 @@ public class BlogSearchRequest {
         this.size = size;
         this.sortingType = sortingType;
     }
+
+    public int getStartPosition() {
+        return (page - 1) * size + 1;
+    }
 }

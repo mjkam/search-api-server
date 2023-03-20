@@ -1,11 +1,14 @@
 package com.mjkam.search.external;
 
 import com.mjkam.search.external.provider.kakao.KakaoDocument;
+import com.mjkam.search.external.provider.naver.NaverItem;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 public class BlogInfo {
     private final String title;
     private final String blogName;
@@ -31,5 +34,15 @@ public class BlogInfo {
                 kakaoDocument.getUrl(),
                 kakaoDocument.getThumbnail(),
                 kakaoDocument.getDatetime());
+    }
+
+    public static BlogInfo of(NaverItem naverItem) {
+        return new BlogInfo(
+                naverItem.getTitle(),
+                naverItem.getBloggerName(),
+                naverItem.getDescription(),
+                naverItem.getLink(),
+                "",
+                naverItem.getPostDate().atStartOfDay());
     }
 }
