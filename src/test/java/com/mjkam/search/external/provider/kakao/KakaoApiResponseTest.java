@@ -21,7 +21,7 @@ public class KakaoApiResponseTest {
             })
     void splitResponseDocumentsByPageAndSize(
             int page, int size, int totalCountFromServer, int pageableCountFromServer, int expectItemCount) {
-
+        //given
         KakaoApiResponse kakaoApiResponse =
                 KakaoApiResponseCreator.createKakaoResponse(totalCountFromServer, pageableCountFromServer, page, size);
 
