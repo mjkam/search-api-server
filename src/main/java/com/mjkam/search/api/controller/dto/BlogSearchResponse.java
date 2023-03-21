@@ -1,7 +1,7 @@
 package com.mjkam.search.api.controller.dto;
 
 import com.mjkam.search.external.provider.BlogDto;
-import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.BlogSearchResultDto;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class BlogSearchResponse {
     private final int pageableCount;
     private final List<BlogInfoDto> documents;
 
-    public BlogSearchResponse(ClientResponse apiResponse) {
+    public BlogSearchResponse(BlogSearchResultDto apiResponse) {
         this.totalCount = apiResponse.getTotalCount();
         this.pageableCount = apiResponse.getPageableCount();
         this.documents = apiResponse.getDocuments().stream()

@@ -1,6 +1,6 @@
 package com.mjkam.search.external.provider.kakao.support;
 
-import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.BlogSearchResultDto;
 import com.mjkam.search.external.provider.kakao.KakaoResponse;
 
 import java.util.List;
@@ -12,8 +12,8 @@ import static com.mjkam.search.external.provider.kakao.support.KakaoMetaBuilder.
 
 public class KakaoApiResponseCreator {
 
-    public static ClientResponse createApiResponse(int totalCount, int pageableCount, int page, int size) {
-        return ClientResponse.fromKakao(page, size, createKakaoResponse(totalCount, pageableCount, page, size));
+    public static BlogSearchResultDto createApiResponse(int totalCount, int pageableCount, int page, int size) {
+        return BlogSearchResultDto.fromKakao(page, size, createKakaoResponse(totalCount, pageableCount, page, size));
     }
 
     public static KakaoResponse createKakaoResponse(int totalCount, int pageableCount, int page, int size) {

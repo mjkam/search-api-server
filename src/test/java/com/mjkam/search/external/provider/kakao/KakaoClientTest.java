@@ -1,7 +1,7 @@
 package com.mjkam.search.external.provider.kakao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.BlogSearchResultDto;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
 import com.mjkam.search.external.provider.SortingType;
@@ -101,7 +101,7 @@ public class KakaoClientTest extends ExternalBaseTest {
         mockKakaoApiServer(totalCountFromServer, pageableCountFromServer, page, size);
 
         //when
-        ClientResponse response = sut.execute(request);
+        BlogSearchResultDto response = sut.execute(request);
 
         //then
         assertThat(response.getTotalCount()).isEqualTo(totalCountFromServer);

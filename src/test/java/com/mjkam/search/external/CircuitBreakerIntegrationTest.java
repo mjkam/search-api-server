@@ -1,6 +1,5 @@
 package com.mjkam.search.external;
 
-import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.provider.ProviderType;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +51,7 @@ public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
 
     private static class MockExceptionApiRequester implements ProviderClient {
         @Override
-        public ClientResponse execute(BlogSearchRequest request) {
+        public BlogSearchResultDto execute(BlogSearchRequest request) {
             throw new RuntimeException("MockExceptionApiRequester Exception");
         }
 
@@ -66,9 +65,9 @@ public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
         private BlogSearchRequest received;
 
         @Override
-        public ClientResponse execute(BlogSearchRequest request) {
+        public BlogSearchResultDto execute(BlogSearchRequest request) {
             received = request;
-            return new ClientResponse();
+            return new BlogSearchResultDto();
         }
 
         @Override

@@ -1,7 +1,7 @@
 package com.mjkam.search.external.provider.naver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.BlogSearchResultDto;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
 import com.mjkam.search.external.provider.SortingType;
@@ -104,7 +104,7 @@ public class NaverClientTest extends ExternalBaseTest {
         mockNaverApiServer(totalCountFromServer, page, size);
 
         //when
-        ClientResponse response = sut.execute(request);
+        BlogSearchResultDto response = sut.execute(request);
 
         //then
         assertThat(response.getTotalCount()).isEqualTo(totalCountFromServer);

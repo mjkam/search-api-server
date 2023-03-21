@@ -1,7 +1,7 @@
 package com.mjkam.search.external.provider.kakao;
 
-import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +47,13 @@ public class KakaoClient implements ProviderClient {
             if (responseBody == null) {
                 throw new IllegalStateException("Body should be not null");
             }
+            responseBody.setRequestedPage(request.getPage());
+            responseBody.setRequestedSize(request.getSize());
 
-            return ClientResponse.fromKakao(
-                    request.getPage(), request.getSize(), responseBody);
+            return responseBody;
+
+//            return ClientResponse.fromKakao(
+//                    request.getPage(), request.getSize(), responseBody);
         } catch (Exception e) {
             log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | key: {}",
                     ProviderType.KAKAO, e.getMessage(), request, kakaoConfiguration.getUrl(), kakaoConfiguration.getKey());

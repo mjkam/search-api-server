@@ -2,20 +2,40 @@ package com.mjkam.search.external.provider.naver;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mjkam.search.external.provider.BlogDto;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderBlogInfo;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
-public class NaverResponse {
+public class NaverResponse implements ClientResponse {
     private Integer total;
     private Integer start;
     private Integer display;
     private List<Item> items;
     private String lastBuildDate;
+
+    @Override
+    public int getTotalCount() {
+        return total;
+    }
+
+    @Override
+    public int getPageableCount() {
+        return Math.min(total, 200);
+    }
+
+    @Override
+    public List<BlogDto> getDocuments() {
+        return items.stream()
+                .map(BlogDto::of)
+                .collect(Collectors.toList());
+    }
 
     public static class Item implements ProviderBlogInfo {
         @JsonProperty("title")

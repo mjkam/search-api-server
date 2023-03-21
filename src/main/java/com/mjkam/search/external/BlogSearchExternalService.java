@@ -1,6 +1,5 @@
 package com.mjkam.search.external;
 
-import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +14,13 @@ public class BlogSearchExternalService {
     private final ProviderClientManager requesterManager;
 
     @CircuitBreaker(name = "search", fallbackMethod = "searchFallBack")
-    public ClientResponse search(BlogSearchRequest request) {
+    public BlogSearchResultDto search(BlogSearchRequest request) {
         ProviderClient providerClient = requesterManager.get(requesterConfiguration.getMain());
-        return providerClient.execute(request);
+        return BlogSearchResultDto.of(providerClient.execute(request));
     }
 
-    private ClientResponse searchFallBack(BlogSearchRequest request, Exception e) {
+    private BlogSearchResultDto searchFallBack(BlogSearchRequest request, Exception e) {
         ProviderClient providerClient = requesterManager.get(requesterConfiguration.getFallback());
-        return providerClient.execute(request);
+        return BlogSearchResultDto.of(providerClient.execute(request));
     }
 }

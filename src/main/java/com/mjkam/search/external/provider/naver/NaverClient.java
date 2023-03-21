@@ -1,7 +1,7 @@
 package com.mjkam.search.external.provider.naver;
 
-import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ public class NaverClient implements ProviderClient {
                 throw new IllegalStateException("Body should be not null");
             }
 
-            return ClientResponse.fromNaver(responseBody);
+            return responseBody;
         } catch (Exception e) {
             log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | clientId: {} | clientSecret: {}",
                     ProviderType.NAVER, e.getMessage(), request, naverConfiguration.getUrl(), naverConfiguration.getClientId(), naverConfiguration.getClientSecret());

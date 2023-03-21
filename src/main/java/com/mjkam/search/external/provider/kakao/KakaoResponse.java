@@ -1,19 +1,36 @@
 package com.mjkam.search.external.provider.kakao;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mjkam.search.external.provider.BlogDto;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderBlogInfo;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Getter
-public class KakaoResponse {
+
+public class KakaoResponse implements ClientResponse {
     @JsonProperty("meta")
     private Meta meta;
     private List<Document> documents;
+
+    @JsonIgnore
+    private int requestedPage;
+    @JsonIgnore
+    private int requestedSize;
+
+    public void setRequestedPage(int page) {
+        this.requestedPage = page;
+    }
+
+    public void setRequestedSize(int size) {
+        this.requestedSize = size;
+    }
 
     public int getTotalCount() {
         return this.meta.getTotalCount();
@@ -23,16 +40,19 @@ public class KakaoResponse {
         return this.meta.getPageableCount();
     }
 
-    public List<Document> getDocumentsForResponse(int page, int size) {
-        int totalPageNum = meta.getPageableCount() / size;
-        if (meta.getPageableCount() % size != 0) {
+    @Override
+    public List<BlogDto> getDocuments() {
+        int totalPageNum = meta.getPageableCount() / requestedSize;
+        if (meta.getPageableCount() % requestedSize != 0) {
             totalPageNum++;
         }
 
-        if (page > totalPageNum) {
+        if (requestedPage > totalPageNum) {
             return List.of();
         }
-        return documents;
+        return documents.stream()
+                .map(BlogDto::of)
+                .collect(Collectors.toList());
     }
 
     @Getter

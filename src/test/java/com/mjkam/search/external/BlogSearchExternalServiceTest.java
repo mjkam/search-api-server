@@ -1,6 +1,5 @@
 package com.mjkam.search.external;
 
-import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.provider.ProviderType;
 import com.mjkam.search.external.provider.SortingType;
@@ -46,7 +45,7 @@ public class BlogSearchExternalServiceTest extends ExternalBaseTest{
         BlogSearchRequest request = new BlogSearchRequest("DUMMY", 1, 1, DUMMY_SORTING_TYPE);
 
         //when
-        ClientResponse response = sut.search(request);
+        BlogSearchResultDto response = sut.search(request);
 
         //then
         assertThat(response.getTotalCount()).isEqualTo(totalCount);
@@ -61,7 +60,7 @@ public class BlogSearchExternalServiceTest extends ExternalBaseTest{
     }
 
     private static class MockProviderClient implements ProviderClient {
-        private final ClientResponse apiResponse;
+        private final BlogSearchResultDto apiResponse;
         private final ProviderType providerType;
 
         private BlogSearchRequest receivedRequest;
@@ -72,7 +71,7 @@ public class BlogSearchExternalServiceTest extends ExternalBaseTest{
         }
 
         @Override
-        public ClientResponse execute(BlogSearchRequest request) {
+        public BlogSearchResultDto execute(BlogSearchRequest request) {
             this.receivedRequest = request;
             return apiResponse;
         }
