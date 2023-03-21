@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -23,17 +27,27 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
 
     @Override
     public BlogSearchApiResponse execute(BlogSearchRequest request) {
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", naverConfiguration.getClientId());
         headers.set("X-Naver-Client-Secret", naverConfiguration.getClientSecret());
         HttpEntity<Object> header = new HttpEntity<>(headers);
 
+        String ss;
+        try {
+            ss = URLEncoder.encode(request.getQuery(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
         String uri = UriComponentsBuilder.fromUriString(naverConfiguration.getUrl())
-                .queryParam("query", request.getQuery())
+                .queryParam("query", ss)
                 .queryParam("start", request.getStartPosition())
                 .queryParam("display", request.getSize())
                 .queryParam("sort", request.getSortingType().getNaverName())
                 .toUriString();
+
+        System.out.println(uri);
 
         try {
             ResponseEntity<NaverApiResponse> response =

@@ -3,15 +3,17 @@ package com.mjkam.search.external;
 import com.mjkam.search.external.provider.kakao.KakaoApiResponse;
 import com.mjkam.search.external.provider.naver.NaverApiResponse;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 @Getter
 public class BlogSearchApiResponse {
-    private final int totalCount;
-    private final int pageableCount;
-    private final List<BlogInfo> documents;
+    private int totalCount;
+    private int pageableCount;
+    private List<BlogInfo> documents;
 
     private BlogSearchApiResponse(int totalCount, int pageableCount, List<BlogInfo> blogInfos) {
         this.totalCount = totalCount;

@@ -2,9 +2,7 @@ package com.mjkam.search.external.provider.naver;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mjkam.search.external.BlogInfo;
 import com.mjkam.search.external.provider.ProviderBlogInfo;
-import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
