@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "search.naver")
+@ConfigurationProperties(prefix = "external.provider.naver")
 @Getter
 @Setter
 public class NaverConfiguration {

@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "search.consumer")
+@ConfigurationProperties(prefix = "core.ranking.consumer")
 @Getter
 @Setter
 public class ConsumerConfiguration {

@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "search.requester")
+@ConfigurationProperties(prefix = "external.circuit")
 @Getter
 @Setter
 public class ProviderCircuitConfiguration {
