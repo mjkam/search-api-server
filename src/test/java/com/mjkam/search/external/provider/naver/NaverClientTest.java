@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mjkam.search.external.BlogSearchResultDto;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.SortingType;
 import com.mjkam.search.external.provider.naver.support.NaverApiResponseCreator;
 import org.assertj.core.api.Assertions;
@@ -86,8 +87,6 @@ public class NaverClientTest extends ExternalBaseTest {
                 .isInstanceOf(Exception.class);
     }
 
-
-
     @ParameterizedTest
     @DisplayName("naver api 호출 성공 테스트")
     @CsvSource(delimiter = ':',
@@ -104,7 +103,7 @@ public class NaverClientTest extends ExternalBaseTest {
         mockNaverApiServer(totalCountFromServer, page, size);
 
         //when
-        BlogSearchResultDto response = sut.execute(request);
+        ClientResponse response = sut.execute(request);
 
         //then
         assertThat(response.getTotalCount()).isEqualTo(totalCountFromServer);

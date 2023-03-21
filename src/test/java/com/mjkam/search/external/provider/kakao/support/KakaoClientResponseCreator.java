@@ -1,20 +1,15 @@
 package com.mjkam.search.external.provider.kakao.support;
 
-import com.mjkam.search.external.BlogSearchResultDto;
 import com.mjkam.search.external.provider.kakao.KakaoResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.mjkam.search.external.provider.kakao.support.KakaoApiResponseBuilder.kakaoApiResponse;
+import static com.mjkam.search.external.provider.kakao.support.KakaoClientResponseBuilder.kakaoApiResponse;
 import static com.mjkam.search.external.provider.kakao.support.KakaoMetaBuilder.kakaoMeta;
 
-public class KakaoApiResponseCreator {
-
-    public static BlogSearchResultDto createApiResponse(int totalCount, int pageableCount, int page, int size) {
-        return BlogSearchResultDto.fromKakao(page, size, createKakaoResponse(totalCount, pageableCount, page, size));
-    }
+public class KakaoClientResponseCreator {
 
     public static KakaoResponse createKakaoResponse(int totalCount, int pageableCount, int page, int size) {
         KakaoResponse.Meta meta =

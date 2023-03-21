@@ -1,13 +1,12 @@
 package com.mjkam.search.external;
 
-import com.mjkam.search.external.provider.ProviderClient;
-import com.mjkam.search.external.provider.ProviderType;
-import com.mjkam.search.external.provider.SortingType;
-import com.mjkam.search.external.provider.kakao.support.KakaoApiResponseCreator;
+import com.mjkam.search.external.provider.*;
+import com.mjkam.search.external.provider.kakao.support.KakaoClientResponseCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,20 +59,35 @@ public class BlogSearchExternalServiceTest extends ExternalBaseTest{
     }
 
     private static class MockProviderClient implements ProviderClient {
-        private final BlogSearchResultDto apiResponse;
+        private final Integer totalCount;
         private final ProviderType providerType;
 
         private BlogSearchRequest receivedRequest;
 
         public MockProviderClient(int totalCount, ProviderType providerType) {
-            this.apiResponse = KakaoApiResponseCreator.createApiResponse(totalCount, totalCount, 1, 1);
+            this.totalCount = totalCount;
             this.providerType = providerType;
         }
 
         @Override
-        public BlogSearchResultDto execute(BlogSearchRequest request) {
+        public ClientResponse execute(BlogSearchRequest request) {
             this.receivedRequest = request;
-            return apiResponse;
+            return new ClientResponse() {
+                @Override
+                public int getTotalCount() {
+                    return totalCount;
+                }
+
+                @Override
+                public int getPageableCount() {
+                    return 0;
+                }
+
+                @Override
+                public List<BlogDto> getDocuments() {
+                    return new ArrayList<>();
+                }
+            };
         }
 
         @Override

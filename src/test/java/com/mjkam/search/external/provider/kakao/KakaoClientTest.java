@@ -1,11 +1,11 @@
 package com.mjkam.search.external.provider.kakao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.mjkam.search.external.BlogSearchResultDto;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.ExternalBaseTest;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.SortingType;
-import com.mjkam.search.external.provider.kakao.support.KakaoApiResponseCreator;
+import com.mjkam.search.external.provider.kakao.support.KakaoClientResponseCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -101,7 +101,7 @@ public class KakaoClientTest extends ExternalBaseTest {
         mockKakaoApiServer(totalCountFromServer, pageableCountFromServer, page, size);
 
         //when
-        BlogSearchResultDto response = sut.execute(request);
+        ClientResponse response = sut.execute(request);
 
         //then
         assertThat(response.getTotalCount()).isEqualTo(totalCountFromServer);
@@ -111,7 +111,9 @@ public class KakaoClientTest extends ExternalBaseTest {
 
     private void mockKakaoApiServer(int totalCountFromServer, int pageableCountFromServer, int page, int size) throws JsonProcessingException {
         KakaoResponse kakaoResponse =
-                KakaoApiResponseCreator.createKakaoResponse(totalCountFromServer, pageableCountFromServer, page, size);
+                KakaoClientResponseCreator.createKakaoResponse(totalCountFromServer, pageableCountFromServer, page, size);
+        kakaoResponse.setRequestedSize(size);
+        kakaoResponse.setRequestedPage(page);
 
         mockRestServiceServer
                 .expect(requestTo(url(DUMMY_QUERY, page, size, DUMMY_SORTING_TYPE)))

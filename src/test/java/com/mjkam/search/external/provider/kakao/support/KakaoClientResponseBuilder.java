@@ -5,30 +5,30 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-public final class KakaoApiResponseBuilder {
+public final class KakaoClientResponseBuilder {
     private KakaoResponse.Meta meta;
     private List<KakaoResponse.Document> documents;
 
-    private KakaoApiResponseBuilder() {
+    private KakaoClientResponseBuilder() {
     }
 
-    public static KakaoApiResponseBuilder kakaoApiResponse() {
-        return new KakaoApiResponseBuilder();
+    public static KakaoClientResponseBuilder kakaoApiResponse() {
+        return new KakaoClientResponseBuilder();
     }
 
-    public KakaoApiResponseBuilder kakaoMeta(KakaoResponse.Meta meta) {
+    public KakaoClientResponseBuilder kakaoMeta(KakaoResponse.Meta meta) {
         this.meta = meta;
         return this;
     }
 
-    public KakaoApiResponseBuilder documents(List<KakaoResponse.Document> documents) {
+    public KakaoClientResponseBuilder documents(List<KakaoResponse.Document> documents) {
         this.documents = documents;
         return this;
     }
 
     public KakaoResponse build() {
         KakaoResponse response = new KakaoResponse();
-        ReflectionTestUtils.setField(response, "kakaoMeta", meta);
+        ReflectionTestUtils.setField(response, "meta", meta);
         ReflectionTestUtils.setField(response, "documents", documents);
 
         return response;

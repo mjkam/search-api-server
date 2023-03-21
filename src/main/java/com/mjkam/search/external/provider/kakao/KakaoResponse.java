@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@ToString
 public class KakaoResponse implements ClientResponse {
     @JsonProperty("meta")
     private Meta meta;
@@ -42,6 +43,10 @@ public class KakaoResponse implements ClientResponse {
 
     @Override
     public List<BlogDto> getDocuments() {
+        if (requestedPage == 0 || requestedSize == 0) {
+            throw new IllegalStateException("RequestedPage and RequestedSize Should be Set");
+        }
+
         int totalPageNum = meta.getPageableCount() / requestedSize;
         if (meta.getPageableCount() % requestedSize != 0) {
             totalPageNum++;

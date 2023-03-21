@@ -1,5 +1,7 @@
 package com.mjkam.search.external;
 
+import com.mjkam.search.external.provider.BlogDto;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.provider.ProviderType;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -51,7 +56,7 @@ public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
 
     private static class MockExceptionApiRequester implements ProviderClient {
         @Override
-        public BlogSearchResultDto execute(BlogSearchRequest request) {
+        public ClientResponse execute(BlogSearchRequest request) {
             throw new RuntimeException("MockExceptionApiRequester Exception");
         }
 
@@ -65,9 +70,24 @@ public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
         private BlogSearchRequest received;
 
         @Override
-        public BlogSearchResultDto execute(BlogSearchRequest request) {
+        public ClientResponse execute(BlogSearchRequest request) {
             received = request;
-            return new BlogSearchResultDto();
+            return new ClientResponse() {
+                @Override
+                public int getTotalCount() {
+                    return 0;
+                }
+
+                @Override
+                public int getPageableCount() {
+                    return 0;
+                }
+
+                @Override
+                public List<BlogDto> getDocuments() {
+                    return new ArrayList<>();
+                }
+            };
         }
 
         @Override

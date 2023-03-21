@@ -1,8 +1,8 @@
 package com.mjkam.search.external.provider.kakao;
 
+import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.provider.ProviderClient;
-import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +51,6 @@ public class KakaoClient implements ProviderClient {
             responseBody.setRequestedSize(request.getSize());
 
             return responseBody;
-
-//            return ClientResponse.fromKakao(
-//                    request.getPage(), request.getSize(), responseBody);
         } catch (Exception e) {
             log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | key: {}",
                     ProviderType.KAKAO, e.getMessage(), request, kakaoConfiguration.getUrl(), kakaoConfiguration.getKey());

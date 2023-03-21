@@ -1,6 +1,7 @@
 package com.mjkam.search.external.provider.naver;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mjkam.search.external.provider.BlogDto;
 import com.mjkam.search.external.provider.ClientResponse;
@@ -20,16 +21,19 @@ public class NaverResponse implements ClientResponse {
     private List<Item> items;
     private String lastBuildDate;
 
+    @JsonIgnore
     @Override
     public int getTotalCount() {
         return total;
     }
 
+    @JsonIgnore
     @Override
     public int getPageableCount() {
         return Math.min(total, 200);
     }
 
+    @JsonIgnore
     @Override
     public List<BlogDto> getDocuments() {
         return items.stream()
