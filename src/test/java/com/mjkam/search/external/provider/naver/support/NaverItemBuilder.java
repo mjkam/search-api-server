@@ -1,6 +1,6 @@
 package com.mjkam.search.external.provider.naver.support;
 
-import com.mjkam.search.external.provider.naver.NaverItem;
+import com.mjkam.search.external.provider.naver.NaverResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -50,15 +50,15 @@ public final class NaverItemBuilder {
         return this;
     }
 
-    public NaverItem build() {
-        NaverItem naverItem = new NaverItem();
-        ReflectionTestUtils.setField(naverItem, "title", title);
-        ReflectionTestUtils.setField(naverItem, "link", link);
-        ReflectionTestUtils.setField(naverItem, "description", description);
-        ReflectionTestUtils.setField(naverItem, "bloggerName", bloggerName);
-        ReflectionTestUtils.setField(naverItem, "bloggerLink", bloggerLink);
-        ReflectionTestUtils.setField(naverItem, "postDate", postDate);
+    public NaverResponse.Item build() {
+        NaverResponse.Item item = new NaverResponse.Item();
+        ReflectionTestUtils.setField(item, "title", title);
+        ReflectionTestUtils.setField(item, "link", link);
+        ReflectionTestUtils.setField(item, "description", description);
+        ReflectionTestUtils.setField(item, "bloggerName", bloggerName);
+        ReflectionTestUtils.setField(item, "bloggerLink", bloggerLink);
+        ReflectionTestUtils.setField(item, "postDate", postDate);
 
-        return naverItem;
+        return item;
     }
 }

@@ -1,7 +1,7 @@
 package com.mjkam.search.api.service.dto;
 
 import com.mjkam.search.external.BlogSearchRequest;
-import com.mjkam.search.external.SortingType;
+import com.mjkam.search.external.provider.SortingType;
 import lombok.Getter;
 
 public class BlogSearchCommand {

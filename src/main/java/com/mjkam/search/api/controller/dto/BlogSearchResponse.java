@@ -1,7 +1,7 @@
 package com.mjkam.search.api.controller.dto;
 
-import com.mjkam.search.external.BlogInfo;
-import com.mjkam.search.external.BlogSearchApiResponse;
+import com.mjkam.search.external.provider.BlogDto;
+import com.mjkam.search.external.provider.ClientResponse;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class BlogSearchResponse {
     private final int pageableCount;
     private final List<BlogInfoDto> documents;
 
-    public BlogSearchResponse(BlogSearchApiResponse apiResponse) {
+    public BlogSearchResponse(ClientResponse apiResponse) {
         this.totalCount = apiResponse.getTotalCount();
         this.pageableCount = apiResponse.getPageableCount();
         this.documents = apiResponse.getDocuments().stream()
@@ -31,13 +31,13 @@ public class BlogSearchResponse {
         private final String thumbnail;
         private final LocalDateTime postDate;
 
-        public BlogInfoDto(BlogInfo blogInfo) {
-            this.title = blogInfo.getTitle();
-            this.blogName = blogInfo.getBlogName();
-            this.contents = blogInfo.getContents();
-            this.url = blogInfo.getUrl();
-            this.thumbnail = blogInfo.getThumbnail();
-            this.postDate = blogInfo.getPostDate();
+        public BlogInfoDto(BlogDto blogDto) {
+            this.title = blogDto.getTitle();
+            this.blogName = blogDto.getBlogName();
+            this.contents = blogDto.getContents();
+            this.url = blogDto.getUrl();
+            this.thumbnail = blogDto.getThumbnail();
+            this.postDate = blogDto.getPostDate();
         }
     }
 }

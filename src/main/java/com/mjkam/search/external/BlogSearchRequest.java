@@ -1,5 +1,6 @@
 package com.mjkam.search.external;
 
+import com.mjkam.search.external.provider.SortingType;
 import lombok.Getter;
 import lombok.ToString;
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "search.requester")
 @Getter
 @Setter
-public class BlogSearchApiRequesterConfiguration {
+public class ProviderCircuitConfiguration {
     private ProviderType main;
     private ProviderType fallback;
 }

@@ -1,9 +1,7 @@
 package com.mjkam.search.external.provider.kakao.support;
 
-import com.mjkam.search.external.BlogSearchApiResponse;
-import com.mjkam.search.external.provider.kakao.KakaoApiResponse;
-import com.mjkam.search.external.provider.kakao.KakaoDocument;
-import com.mjkam.search.external.provider.kakao.KakaoMeta;
+import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.provider.kakao.KakaoResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,26 +12,26 @@ import static com.mjkam.search.external.provider.kakao.support.KakaoMetaBuilder.
 
 public class KakaoApiResponseCreator {
 
-    public static BlogSearchApiResponse createApiResponse(int totalCount, int pageableCount, int page, int size) {
-        return BlogSearchApiResponse.fromKakao(page, size, createKakaoResponse(totalCount, pageableCount, page, size));
+    public static ClientResponse createApiResponse(int totalCount, int pageableCount, int page, int size) {
+        return ClientResponse.fromKakao(page, size, createKakaoResponse(totalCount, pageableCount, page, size));
     }
 
-    public static KakaoApiResponse createKakaoResponse(int totalCount, int pageableCount, int page, int size) {
-        KakaoMeta meta =
+    public static KakaoResponse createKakaoResponse(int totalCount, int pageableCount, int page, int size) {
+        KakaoResponse.Meta meta =
                 kakaoMeta()
                         .totalCount(totalCount)
                         .pageableCount(pageableCount)
                         .build();
-        List<KakaoDocument> kakaoDocuments = createDocuments(pageableCount, page, size);
+        List<KakaoResponse.Document> documents = createDocuments(pageableCount, page, size);
 
         return kakaoApiResponse()
                 .kakaoMeta(meta)
-                .documents(kakaoDocuments)
+                .documents(documents)
                 .build();
     }
 
     // kakao api 가 리턴하는 방식
-    private static List<KakaoDocument> createDocuments(int pageableCount, int page, int size) {
+    private static List<KakaoResponse.Document> createDocuments(int pageableCount, int page, int size) {
         int totalPageNum = pageableCount / size;
         if (pageableCount % size != 0) {
             totalPageNum++;
@@ -50,9 +48,9 @@ public class KakaoApiResponseCreator {
         }
     }
 
-    private static List<KakaoDocument> documents(int count) {
+    private static List<KakaoResponse.Document> documents(int count) {
         return IntStream.range(0, count)
-                .mapToObj(i -> new KakaoDocument())
+                .mapToObj(i -> new KakaoResponse.Document())
                 .collect(Collectors.toList());
     }
 }

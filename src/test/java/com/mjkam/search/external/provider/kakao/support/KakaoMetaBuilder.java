@@ -1,6 +1,6 @@
 package com.mjkam.search.external.provider.kakao.support;
 
-import com.mjkam.search.external.provider.kakao.KakaoMeta;
+import com.mjkam.search.external.provider.kakao.KakaoResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public final class KakaoMetaBuilder {
@@ -30,12 +30,12 @@ public final class KakaoMetaBuilder {
         return this;
     }
 
-    public KakaoMeta build() {
-        KakaoMeta kakaoMeta = new KakaoMeta();
-        ReflectionTestUtils.setField(kakaoMeta, "totalCount", totalCount);
-        ReflectionTestUtils.setField(kakaoMeta, "pageableCount", pageableCount);
-        ReflectionTestUtils.setField(kakaoMeta, "isEnd", isEnd);
+    public KakaoResponse.Meta build() {
+        KakaoResponse.Meta meta = new KakaoResponse.Meta();
+        ReflectionTestUtils.setField(meta, "totalCount", totalCount);
+        ReflectionTestUtils.setField(meta, "pageableCount", pageableCount);
+        ReflectionTestUtils.setField(meta, "isEnd", isEnd);
 
-        return kakaoMeta;
+        return meta;
     }
 }

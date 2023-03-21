@@ -1,7 +1,6 @@
 package com.mjkam.search.external.provider.naver.support;
 
-import com.mjkam.search.external.provider.naver.NaverApiResponse;
-import com.mjkam.search.external.provider.naver.NaverItem;
+import com.mjkam.search.external.provider.naver.NaverResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -10,7 +9,7 @@ public final class NaverApiResponseBuilder {
     private Integer total;
     private Integer start;
     private Integer display;
-    private List<NaverItem> items;
+    private List<NaverResponse.Item> items;
     private String lastBuildDate = "";
 
     private NaverApiResponseBuilder() {
@@ -35,7 +34,7 @@ public final class NaverApiResponseBuilder {
         return this;
     }
 
-    public NaverApiResponseBuilder items(List<NaverItem> items) {
+    public NaverApiResponseBuilder items(List<NaverResponse.Item> items) {
         this.items = items;
         return this;
     }
@@ -45,8 +44,8 @@ public final class NaverApiResponseBuilder {
         return this;
     }
 
-    public NaverApiResponse build() {
-        NaverApiResponse response = new NaverApiResponse();
+    public NaverResponse build() {
+        NaverResponse response = new NaverResponse();
         ReflectionTestUtils.setField(response, "total", total);
         ReflectionTestUtils.setField(response, "start", start);
         ReflectionTestUtils.setField(response, "display", display);

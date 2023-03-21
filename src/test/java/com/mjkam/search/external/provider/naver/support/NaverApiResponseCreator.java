@@ -1,8 +1,6 @@
 package com.mjkam.search.external.provider.naver.support;
 
-import com.mjkam.search.external.provider.naver.NaverApiResponse;
-import com.mjkam.search.external.provider.naver.NaverItem;
-import com.mjkam.search.external.provider.naver.support.NaverApiResponseBuilder;
+import com.mjkam.search.external.provider.naver.NaverResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,18 +11,18 @@ public class NaverApiResponseCreator {
 //        return BlogSearchApiResponse.fromKakao(page, size, createKakaoResponse(totalCount, pageableCount, page, size));
 //    }
 
-    public static NaverApiResponse create(int totalCount, int page, int size) {
-        List<NaverItem> naverItems = createItems(totalCount, page, size);
+    public static NaverResponse create(int totalCount, int page, int size) {
+        List<NaverResponse.Item> items = createItems(totalCount, page, size);
         return NaverApiResponseBuilder.naverApiResponse()
                 .total(totalCount)
                 .start((page - 1) * size + 1)
-                .display(naverItems.size())
-                .items(naverItems)
+                .display(items.size())
+                .items(items)
                 .build();
     }
 
     // naver api 가 리턴하는 방식
-    private static List<NaverItem> createItems(int totalCount, int page, int size) {
+    private static List<NaverResponse.Item> createItems(int totalCount, int page, int size) {
         int pageableCount = Math.min(totalCount, 200);
         int totalPageCount = pageableCount / size;
         if (pageableCount % size != 0) {
@@ -43,8 +41,8 @@ public class NaverApiResponseCreator {
         }
     }
 
-    private static List<NaverItem> items(int count) {
-        NaverItem dummy = NaverItemBuilder.naverItem().build();
+    private static List<NaverResponse.Item> items(int count) {
+        NaverResponse.Item dummy = NaverItemBuilder.naverItem().build();
 
         return IntStream.range(0, count)
                 .mapToObj(i -> dummy)

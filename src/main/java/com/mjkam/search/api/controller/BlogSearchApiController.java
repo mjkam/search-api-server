@@ -3,7 +3,7 @@ package com.mjkam.search.api.controller;
 import com.mjkam.search.api.controller.dto.BlogSearchResponse;
 import com.mjkam.search.api.service.BlogSearchService;
 import com.mjkam.search.api.service.dto.BlogSearchCommand;
-import com.mjkam.search.external.BlogSearchApiResponse;
+import com.mjkam.search.external.provider.ClientResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ public class BlogSearchApiController {
             @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(50) Integer size,
             @RequestParam(required = false, defaultValue = "accuracy") String sort
     ) {
-        BlogSearchApiResponse response = blogSearchService.search(new BlogSearchCommand(query, page, size, sort));
+        ClientResponse response = blogSearchService.search(new BlogSearchCommand(query, page, size, sort));
         return new BlogSearchResponse(response);
     }
 }

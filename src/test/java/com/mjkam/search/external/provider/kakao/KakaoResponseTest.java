@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KakaoApiResponseTest {
+public class KakaoResponseTest {
     @ParameterizedTest
     @DisplayName("KakaoApiResponse 는 요청 page 와 size 에 맞는 개수로 잘라서 Document 를 리턴해야함")
     @CsvSource(delimiter = ':',
@@ -22,11 +22,11 @@ public class KakaoApiResponseTest {
     void splitResponseDocumentsByPageAndSize(
             int page, int size, int totalCountFromServer, int pageableCountFromServer, int expectItemCount) {
         //given
-        KakaoApiResponse kakaoApiResponse =
+        KakaoResponse kakaoResponse =
                 KakaoApiResponseCreator.createKakaoResponse(totalCountFromServer, pageableCountFromServer, page, size);
 
         //when
-        List<KakaoDocument> result = kakaoApiResponse.getDocumentsForResponse(page, size);
+        List<KakaoResponse.Document> result = kakaoResponse.getDocumentsForResponse(page, size);
 
         //then
         assertThat(result.size()).isEqualTo(expectItemCount);

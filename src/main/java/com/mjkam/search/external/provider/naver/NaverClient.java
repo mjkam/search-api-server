@@ -1,7 +1,7 @@
 package com.mjkam.search.external.provider.naver;
 
-import com.mjkam.search.external.BlogSearchApiRequester;
-import com.mjkam.search.external.BlogSearchApiResponse;
+import com.mjkam.search.external.provider.ProviderClient;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -24,12 +20,12 @@ import java.nio.charset.StandardCharsets;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
+public class NaverClient implements ProviderClient {
     private final RestTemplate restTemplate;
     private final NaverConfiguration naverConfiguration;
 
     @Override
-    public BlogSearchApiResponse execute(BlogSearchRequest request) {
+    public ClientResponse execute(BlogSearchRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", naverConfiguration.getClientId());
         headers.set("X-Naver-Client-Secret", naverConfiguration.getClientSecret());
@@ -45,15 +41,15 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
                     request.getSortingType().getNaverName());
             URL url = new URL(urlStr);
 
-            ResponseEntity<NaverApiResponse> response =
-                    restTemplate.exchange(url.toURI(), HttpMethod.GET, header, NaverApiResponse.class);
+            ResponseEntity<NaverResponse> response =
+                    restTemplate.exchange(url.toURI(), HttpMethod.GET, header, NaverResponse.class);
 
-            NaverApiResponse responseBody = response.getBody();
+            NaverResponse responseBody = response.getBody();
             if (responseBody == null) {
                 throw new IllegalStateException("Body should be not null");
             }
 
-            return BlogSearchApiResponse.fromNaver(responseBody);
+            return ClientResponse.fromNaver(responseBody);
         } catch (Exception e) {
             log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | clientId: {} | clientSecret: {}",
                     ProviderType.NAVER, e.getMessage(), request, naverConfiguration.getUrl(), naverConfiguration.getClientId(), naverConfiguration.getClientSecret());

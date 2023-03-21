@@ -3,6 +3,7 @@ package com.mjkam.search.external;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mjkam.search.external.provider.SortingType;
 
 public class ExternalBaseTest {
     protected final ObjectMapper objectMapper;

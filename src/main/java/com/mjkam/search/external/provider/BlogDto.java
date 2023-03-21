@@ -1,8 +1,5 @@
-package com.mjkam.search.external;
+package com.mjkam.search.external.provider;
 
-import com.mjkam.search.external.provider.ProviderBlogInfo;
-import com.mjkam.search.external.provider.kakao.KakaoDocument;
-import com.mjkam.search.external.provider.naver.NaverItem;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -10,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @ToString
-public class BlogInfo {
+public class BlogDto {
     private final String title;
     private final String blogName;
     private final String contents;
@@ -18,7 +15,7 @@ public class BlogInfo {
     private final String thumbnail;
     private final LocalDateTime postDate;
 
-    public BlogInfo(String title, String blogName, String contents, String url, String thumbnail, LocalDateTime postDate) {
+    public BlogDto(String title, String blogName, String contents, String url, String thumbnail, LocalDateTime postDate) {
         this.title = title;
         this.blogName = blogName;
         this.contents = contents;
@@ -27,8 +24,8 @@ public class BlogInfo {
         this.postDate = postDate;
     }
 
-    public static BlogInfo of(ProviderBlogInfo providerBlogInfo) {
-        return new BlogInfo(
+    public static BlogDto of(ProviderBlogInfo providerBlogInfo) {
+        return new BlogDto(
                 providerBlogInfo.getTitle(),
                 providerBlogInfo.getBlogName(),
                 providerBlogInfo.getContents(),

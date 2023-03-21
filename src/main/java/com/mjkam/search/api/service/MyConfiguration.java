@@ -19,7 +19,7 @@ public class MyConfiguration {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
                 entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> {
-                    log.error(event.toString());
+                    log.info(event.toString());
                 });
             }
 

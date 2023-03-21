@@ -1,6 +1,6 @@
 package com.mjkam.search.external.provider.kakao.support;
 
-import com.mjkam.search.external.provider.kakao.KakaoDocument;
+import com.mjkam.search.external.provider.kakao.KakaoResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
@@ -50,15 +50,15 @@ public final class KakaoDocumentBuilder {
         return this;
     }
 
-    public KakaoDocument build() {
-        KakaoDocument kakaoDocument = new KakaoDocument();
-        ReflectionTestUtils.setField(kakaoDocument, "title", title);
-        ReflectionTestUtils.setField(kakaoDocument, "contents", contents);
-        ReflectionTestUtils.setField(kakaoDocument, "url", url);
-        ReflectionTestUtils.setField(kakaoDocument, "blogName", blogName);
-        ReflectionTestUtils.setField(kakaoDocument, "thumbnail", thumbnail);
-        ReflectionTestUtils.setField(kakaoDocument, "datetime", datetime);
+    public KakaoResponse.Document build() {
+        KakaoResponse.Document document = new KakaoResponse.Document();
+        ReflectionTestUtils.setField(document, "title", title);
+        ReflectionTestUtils.setField(document, "contents", contents);
+        ReflectionTestUtils.setField(document, "url", url);
+        ReflectionTestUtils.setField(document, "blogName", blogName);
+        ReflectionTestUtils.setField(document, "thumbnail", thumbnail);
+        ReflectionTestUtils.setField(document, "datetime", datetime);
 
-        return kakaoDocument;
+        return document;
     }
 }

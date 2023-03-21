@@ -1,11 +1,11 @@
 package com.mjkam.search.external;
 
+import com.mjkam.search.external.provider.ClientResponse;
+import com.mjkam.search.external.provider.ProviderClient;
 import com.mjkam.search.external.provider.ProviderType;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,12 +16,12 @@ import static org.mockito.BDDMockito.*;
 @SpringBootTest
 public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
     @Autowired
-    private BlogSearchRequestService sut;
+    private BlogSearchExternalService sut;
 
     @MockBean
-    private BlogSearchApiRequesterManager requesterManager;
+    private ProviderClientManager requesterManager;
     @MockBean
-    private BlogSearchApiRequesterConfiguration requesterConfiguration;
+    private ProviderCircuitConfiguration requesterConfiguration;
 
     private MockExceptionApiRequester exceptionApiRequester;
     private MockSuccessApiRequester successApiRequester;
@@ -50,9 +50,9 @@ public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
         assertThat(successApiRequester.getReceived()).isEqualTo(request);
     }
 
-    private static class MockExceptionApiRequester implements BlogSearchApiRequester {
+    private static class MockExceptionApiRequester implements ProviderClient {
         @Override
-        public BlogSearchApiResponse execute(BlogSearchRequest request) {
+        public ClientResponse execute(BlogSearchRequest request) {
             throw new RuntimeException("MockExceptionApiRequester Exception");
         }
 
@@ -62,13 +62,13 @@ public class CircuitBreakerIntegrationTest extends ExternalBaseTest{
         }
     }
 
-    private static class MockSuccessApiRequester implements BlogSearchApiRequester {
+    private static class MockSuccessApiRequester implements ProviderClient {
         private BlogSearchRequest received;
 
         @Override
-        public BlogSearchApiResponse execute(BlogSearchRequest request) {
+        public ClientResponse execute(BlogSearchRequest request) {
             received = request;
-            return new BlogSearchApiResponse();
+            return new ClientResponse();
         }
 
         @Override

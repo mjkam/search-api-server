@@ -1,10 +1,9 @@
 package com.mjkam.search.external.provider.kakao;
 
-import com.mjkam.search.external.BlogSearchApiRequester;
-import com.mjkam.search.external.BlogSearchApiResponse;
+import com.mjkam.search.external.provider.ProviderClient;
+import com.mjkam.search.external.provider.ClientResponse;
 import com.mjkam.search.external.BlogSearchRequest;
 import com.mjkam.search.external.provider.ProviderType;
-import com.mjkam.search.external.provider.naver.NaverApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URL;
 import java.net.URLEncoder;
@@ -22,12 +20,12 @@ import java.nio.charset.StandardCharsets;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
+public class KakaoClient implements ProviderClient {
     private final RestTemplate restTemplate;
     private final KakaoConfiguration kakaoConfiguration;
 
     @Override
-    public BlogSearchApiResponse execute(BlogSearchRequest request) {
+    public ClientResponse execute(BlogSearchRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, String.format("KakaoAK %s", kakaoConfiguration.getKey()));
         HttpEntity<Object> header = new HttpEntity<>(headers);
@@ -42,15 +40,15 @@ public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
                     request.getSortingType().getKakaoName());
             URL url = new URL(urlStr);
 
-            ResponseEntity<KakaoApiResponse> response =
-                    restTemplate.exchange(url.toURI(), HttpMethod.GET, header, KakaoApiResponse.class);
+            ResponseEntity<KakaoResponse> response =
+                    restTemplate.exchange(url.toURI(), HttpMethod.GET, header, KakaoResponse.class);
 
-            KakaoApiResponse responseBody = response.getBody();
+            KakaoResponse responseBody = response.getBody();
             if (responseBody == null) {
                 throw new IllegalStateException("Body should be not null");
             }
 
-            return BlogSearchApiResponse.fromKakao(
+            return ClientResponse.fromKakao(
                     request.getPage(), request.getSize(), responseBody);
         } catch (Exception e) {
             log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | key: {}",

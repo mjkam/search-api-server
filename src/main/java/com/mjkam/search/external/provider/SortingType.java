@@ -1,4 +1,4 @@
-package com.mjkam.search.external;
+package com.mjkam.search.external.provider;
 
 import lombok.Getter;
 
