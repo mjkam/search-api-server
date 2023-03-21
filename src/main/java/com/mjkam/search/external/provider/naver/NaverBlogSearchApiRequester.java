@@ -44,7 +44,7 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
                     request.getSize(),
                     request.getSortingType().getNaverName());
             URL url = new URL(urlStr);
-            System.out.println(url.toURI());
+
             ResponseEntity<NaverApiResponse> response =
                     restTemplate.exchange(url.toURI(), HttpMethod.GET, header, NaverApiResponse.class);
 

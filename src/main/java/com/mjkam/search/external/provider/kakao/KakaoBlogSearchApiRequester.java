@@ -41,7 +41,6 @@ public class KakaoBlogSearchApiRequester implements BlogSearchApiRequester {
                     request.getSize(),
                     request.getSortingType().getKakaoName());
             URL url = new URL(urlStr);
-            System.out.println(url.toURI());
 
             ResponseEntity<KakaoApiResponse> response =
                     restTemplate.exchange(url.toURI(), HttpMethod.GET, header, KakaoApiResponse.class);

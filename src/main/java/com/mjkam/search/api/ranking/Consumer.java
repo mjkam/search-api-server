@@ -19,7 +19,6 @@ public class Consumer extends Thread {
             while(true) {
                 String take = queue.take();
                 keywordCountJpaRepository.incrementCount(take);
-                System.out.println(take);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
