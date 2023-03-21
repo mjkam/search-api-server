@@ -36,7 +36,7 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
         HttpEntity<Object> header = new HttpEntity<>(headers);
 
         try {
-            String query = URLEncoder.encode(request.getQuery(), "UTF-8");
+            String query = URLEncoder.encode(request.getQuery(), StandardCharsets.UTF_8);
             String urlStr = String.format("%s?query=%s&start=%s&display=%s&sort=%s",
                     naverConfiguration.getUrl(),
                     query,
