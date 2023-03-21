@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface KeywordCountJpaRepository extends JpaRepository<KeywordCount, Long> {
+public interface KeywordCountJpaRepository extends JpaRepository<KeywordCount, Long>, CustomKeywordRepository {
     @Query("SELECT m FROM KeywordCount m ORDER BY m.count DESC")
     List<KeywordCount> findTop10OrderByCountDesc(Pageable pageable);
 
