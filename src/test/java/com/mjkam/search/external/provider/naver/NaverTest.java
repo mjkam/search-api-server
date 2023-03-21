@@ -71,7 +71,6 @@ public class NaverTest {
 //            System.out.println(e);
 //        }
 
-
         URL url = new URL("https://openapi.naver.com/v1/search/blog.json?query=" + query + "&start=1&display=1");
 //        String uri = UriComponentsBuilder.fromUriString("https://openapi.naver.com/v1/search/blog.json")
 //                .queryParam("query", query)

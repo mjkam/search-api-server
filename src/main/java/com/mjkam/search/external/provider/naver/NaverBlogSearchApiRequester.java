@@ -15,6 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -27,31 +30,23 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
 
     @Override
     public BlogSearchApiResponse execute(BlogSearchRequest request) {
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", naverConfiguration.getClientId());
         headers.set("X-Naver-Client-Secret", naverConfiguration.getClientSecret());
         HttpEntity<Object> header = new HttpEntity<>(headers);
 
-        String ss;
         try {
-            ss = URLEncoder.encode(request.getQuery(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
-        String uri = UriComponentsBuilder.fromUriString(naverConfiguration.getUrl())
-                .queryParam("query", ss)
-                .queryParam("start", request.getStartPosition())
-                .queryParam("display", request.getSize())
-                .queryParam("sort", request.getSortingType().getNaverName())
-                .toUriString();
-
-        System.out.println(uri);
-
-        try {
+            String query = URLEncoder.encode(request.getQuery(), "UTF-8");
+            String urlStr = String.format("%s?query=%s&start=%s&display=%s&sort=%s",
+                    naverConfiguration.getUrl(),
+                    query,
+                    request.getStartPosition(),
+                    request.getSize(),
+                    request.getSortingType().getNaverName());
+            URL url = new URL(urlStr);
+            System.out.println(url.toURI());
             ResponseEntity<NaverApiResponse> response =
-                    restTemplate.exchange(uri, HttpMethod.GET, header, NaverApiResponse.class);
+                    restTemplate.exchange(url.toURI(), HttpMethod.GET, header, NaverApiResponse.class);
 
             NaverApiResponse responseBody = response.getBody();
             if (responseBody == null) {
@@ -62,10 +57,8 @@ public class NaverBlogSearchApiRequester implements BlogSearchApiRequester {
         } catch (Exception e) {
             log.warn("Provider {} API FAILED | Msg: {} | Request: {} | url: {} | clientId: {} | clientSecret: {}",
                     ProviderType.NAVER, e.getMessage(), request, naverConfiguration.getUrl(), naverConfiguration.getClientId(), naverConfiguration.getClientSecret());
-            throw e;
+            throw new IllegalArgumentException(e);
         }
-
-
     }
 
     @Override
