@@ -1,9 +1,11 @@
 package com.mjkam.search.api.ranking;
 
 import com.mjkam.search.api.repository.KeywordCountJpaRepository;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Slf4j
 public class Consumer extends Thread {
     private final KeywordCountJpaRepository keywordCountJpaRepository;
     private final LinkedBlockingQueue<String> queue;
@@ -16,9 +18,8 @@ public class Consumer extends Thread {
     @Override
     public void run() {
         try {
-            while(true) {
-                String take = queue.take();
-                keywordCountJpaRepository.incrementCount(take);
+            while(!queue.isEmpty()) {
+                keywordCountJpaRepository.incrementCount(queue.take());
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

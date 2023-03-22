@@ -20,6 +20,7 @@ public class WorkDistributor {
 
     public void insert(String keyword) {
         int consumerIdx = getConsumerIdx(keyword);
+
         checkStatus(consumerIdx);
         insertQueue(consumerIdx, keyword);
     }
