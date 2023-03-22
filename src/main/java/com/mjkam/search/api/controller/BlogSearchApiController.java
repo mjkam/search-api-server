@@ -18,7 +18,7 @@ public class BlogSearchApiController {
     public BlogSearchResponse search(
             @RequestParam(required = false, defaultValue = "") String query,
             @RequestParam(required = false, defaultValue = "1") String page,
-            @RequestParam(required = false, defaultValue = "1") String size,
+            @RequestParam(required = false, defaultValue = "10") String size,
             @RequestParam(required = false, defaultValue = "accuracy") String sort
     ) {
         BlogSearchResultDto response = blogSearchService.search(new BlogSearchCommand(query, page, size, sort));
