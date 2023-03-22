@@ -16,7 +16,7 @@ public class BlogSearchService {
 
     @Transactional
     public BlogSearchResultDto search(BlogSearchCommand blogSearchCommand) {
-        workDistributor.insert(blogSearchCommand.getQuery());
+        workDistributor.insert(blogSearchCommand.getKeywordFromQuery());
         return requestService.search(blogSearchCommand.toSearchRequest());
     }
 }
